@@ -1,0 +1,27 @@
+# TEMPLATE for the MHCLG "Revenue outturn multi-year data set" (2017-18 to 2024-25).
+# Header names below are PLACEHOLDERS. Download the file, run:
+#     council-radar inspect <file>
+# then replace each right-hand value with the exact header, delete unmapped lines,
+# and save as ro_multi_year.toml. Check units in the metadata (expected: GBP thousands).
+# Source: https://www.gov.uk/government/statistics/local-authority-revenue-expenditure-and-financing-england-revenue-outturn-multi-year-data-set
+
+[source]
+name = "ro_multi_year"
+description = "MHCLG revenue outturn multi-year data set"
+header_row = 0
+units_multiplier = 1000
+money_columns = [
+  "net_revenue_expenditure", "reserves_unallocated", "reserves_earmarked",
+  "social_care_spend",
+]
+
+[year]
+column = "TODO_year_header"
+format = "fy_label"
+
+[columns]
+ons_code = "TODO_ons_code_header"
+net_revenue_expenditure = "TODO_net_revenue_expenditure_header"
+reserves_unallocated = "TODO_unallocated_reserves_header"
+reserves_earmarked = "TODO_earmarked_reserves_header"
+social_care_spend = "TODO_social_care_header"

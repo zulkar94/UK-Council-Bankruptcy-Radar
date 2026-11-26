@@ -1,0 +1,29 @@
+# Column map for the synthetic sample in data/sample/finance_year.csv.
+# Values in the sample are GBP thousands, like MHCLG tables.
+
+[source]
+name = "sample_finance_year"
+description = "Synthetic council finance panel for tests and demos"
+header_row = 0
+units_multiplier = 1000
+money_columns = [
+  "net_revenue_expenditure", "reserves_unallocated", "reserves_earmarked",
+  "dsg_deficit", "external_borrowing", "commercial_property",
+  "interest_cost", "core_spending_power", "social_care_spend",
+]
+
+[year]
+column = "Financial year"
+format = "fy_label"
+
+[columns]
+ons_code = "ONS code"
+net_revenue_expenditure = "Net revenue expenditure (£000)"
+reserves_unallocated = "Unallocated reserves (£000)"
+reserves_earmarked = "Earmarked reserves (£000)"
+dsg_deficit = "DSG deficit (£000)"
+external_borrowing = "External borrowing (£000)"
+commercial_property = "Commercial property (£000)"
+interest_cost = "Interest payable (£000)"
+core_spending_power = "Core spending power (£000)"
+social_care_spend = "Social care net spend (£000)"
