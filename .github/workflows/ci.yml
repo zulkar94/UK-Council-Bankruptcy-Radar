@@ -49,6 +49,7 @@ jobs:
           council-radar ingest sample_finance_year data/sample/finance_year.csv
           council-radar load-events data/sample/events.csv
           council-radar score --top 5
+          council-radar backtest --k 5 --observed-until 2025-03-31
           psql "postgresql://radar:ci-only@localhost:5432/radar" -v ON_ERROR_STOP=1 -f sql/powerbi_views.sql
 
   docker:

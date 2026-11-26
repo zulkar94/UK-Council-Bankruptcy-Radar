@@ -6,12 +6,14 @@ import argparse
 import sys
 from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
+from datetime import date
 from pathlib import Path
 
 import pandas as pd
 from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 
+from council_radar.backtest import BacktestConfig, render_markdown, run_backtest
 from council_radar.db import repo
 from council_radar.db.models import create_schema
 from council_radar.domain.rules import rule_score
@@ -117,6 +119,30 @@ def cmd_score(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_backtest(args: argparse.Namespace) -> int:
+    cfg = BacktestConfig(
+        horizon=args.horizon,
+        k=args.k,
+        observed_until=date.fromisoformat(args.observed_until) if args.observed_until else None,
+    )
+    with _session(args) as s:
+        panel = repo.finance_panel(s)
+        events = repo.events_frame(s)
+        names = repo.council_names(s)
+    if panel.empty or events.empty:
+        print("need finance data and events loaded first", file=sys.stderr)
+        return 1
+    report = run_backtest(panel, events, cfg)
+    md = render_markdown(report, names)
+    print(md)
+    for path, text in ((args.out, md), (args.json, report.to_json())):
+        if path:
+            Path(path).parent.mkdir(parents=True, exist_ok=True)
+            Path(path).write_text(text, encoding="utf-8")
+            print(f"written: {path}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="council-radar", description=__doc__)
     p.add_argument("--db", help="SQLAlchemy URL (default: FAI_DATABASE_URL or local SQLite)")
@@ -149,6 +175,17 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--out", help="write scores CSV (for Power BI)")
     sp.add_argument("--top", type=int, default=10)
     sp.set_defaults(fn=cmd_score)
+
+    sp = sub.add_parser("backtest", help="walk-forward backtest of all scorers")
+    sp.add_argument("--horizon", type=int, default=2, help="years ahead an event must fall")
+    sp.add_argument("--k", type=int, default=10, help="councils flagged per year")
+    sp.add_argument(
+        "--observed-until",
+        help="date (YYYY-MM-DD) up to which the event list is complete; default: last event",
+    )
+    sp.add_argument("--out", help="write markdown report")
+    sp.add_argument("--json", help="write JSON report")
+    sp.set_defaults(fn=cmd_backtest)
     return p
 
 

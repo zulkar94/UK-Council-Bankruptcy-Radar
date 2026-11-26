@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "uk-council-bankruptcy-radar"
-version = "0.1.0"
+version = "0.2.0"
 description = "Early-warning radar for English council finances: public-data ingestion, tier-aware signals and a baseline Section 114 / EFS risk score."
 readme = "README.md"
 license = "MIT"
@@ -16,6 +16,7 @@ dependencies = [
     "pydantic>=2.7",
     "openpyxl>=3.1",
     "odfpy>=1.4",
+    "scikit-learn>=1.5",
 ]
 
 [project.urls]
@@ -66,6 +67,10 @@ python_version = "3.12"
 strict = true
 mypy_path = "src"
 packages = ["finance_ai_core", "council_radar"]
+
+[[tool.mypy.overrides]]
+module = ["sklearn.*"]
+ignore_missing_imports = true
 
 [tool.bandit]
 exclude_dirs = ["tests", "scripts"]

@@ -154,6 +154,10 @@ def load_events(session: Session, df: pd.DataFrame) -> MatchResult:
     return match
 
 
+def council_names(session: Session) -> dict[str, str]:
+    return {code: name for code, name in session.execute(select(Council.ons_code, Council.name))}
+
+
 def finance_panel(session: Session) -> pd.DataFrame:
     stmt = select(FinanceYear, Council.tier).join(Council)
     data = [
