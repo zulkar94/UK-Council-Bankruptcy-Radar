@@ -1,0 +1,113 @@
+council_name,event_type,event_date,financial_year,amount_gbp_m,verification,source_url
+Northamptonshire,s114,2018-02-02,,,secondary,https://www.instituteforgovernment.org.uk/explainer/local-authority-section-114-notices
+Croydon,s114,2020-11-11,,,secondary,https://www.instituteforgovernment.org.uk/explainer/local-authority-section-114-notices
+Slough,s114,2021-07-02,,,secondary,https://www.instituteforgovernment.org.uk/explainer/local-authority-section-114-notices
+Croydon,s114,2022-11-22,,,secondary,https://www.instituteforgovernment.org.uk/explainer/local-authority-section-114-notices
+Thurrock,s114,2022-12-19,,,primary,https://www.thurrock.gov.uk/how-we-plan-our-finances/section-114-notice
+Woking,s114,2023-06-07,,,primary,https://www.woking.gov.uk/your-council/data-finance-performance/performance/government-intervention/section-114-notice
+Birmingham,s114,2023-09-05,,,primary,https://www.birmingham.gov.uk/info/50306/commissioners_intervention_and_improvement/2757/frequently_asked_questions_faqs_about_section_114/2
+Nottingham,s114,2023-11-29,,,secondary,https://www.statista.com/statistics/1447315/england-section-114-notices
+Barnet,efs,2025-02-20,2026,55.7,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Birmingham,efs,2025-02-20,2026,180.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Birmingham,efs,2025-02-20,2025,490.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Bradford,efs,2025-02-20,2026,113.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Cheshire East,efs,2025-02-20,2026,25.3,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Cheshire East,efs,2025-02-20,2025,17.6,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Croydon,efs,2025-02-20,2026,110.3,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Croydon,efs,2025-02-20,2024,50.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Croydon,efs,2025-02-20,2025,51,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Cumberland,efs,2025-02-20,2026,23.439,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Eastbourne,efs,2025-02-20,2026,2.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Enfield,efs,2025-02-20,2026,10.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Enfield,efs,2025-02-20,2025,20.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Halton,efs,2025-02-20,2026,32.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Halton,efs,2025-02-20,2025,10,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Haringey,efs,2025-02-20,2026,40.6,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Haringey,efs,2025-02-20,2025,10,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Havering,efs,2025-02-20,2026,88.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Medway,efs,2025-02-20,2026,28.469,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Newham,efs,2025-02-20,2026,51.2,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Newham,efs,2025-02-20,2025,15.969,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Nottingham,efs,2025-02-20,2026,25.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Shropshire,efs,2025-02-20,2025,26.9,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Slough,efs,2025-02-20,2026,15.709,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Solihull,efs,2025-02-20,2026,32.658,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Solihull,efs,2025-02-20,2025,15.615,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Somerset,efs,2025-02-20,2026,45.118,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Southampton,efs,2025-02-20,2026,89.9,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Stoke-on-Trent,efs,2025-02-20,2026,16.8,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Swindon,efs,2025-02-20,2026,14.7,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Thurrock,efs,2025-02-20,2026,62.11,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Thurrock,efs,2025-02-20,2023,130.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Thurrock,efs,2025-02-20,2024,184.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Thurrock,efs,2025-02-20,2025,96.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Trafford,efs,2025-02-20,2026,9.6,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+West Berkshire,efs,2025-02-20,2026,20.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+West Berkshire,efs,2025-02-20,2025,13.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Windsor & Maidenhead,efs,2025-02-20,2026,41.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Windsor & Maidenhead,efs,2025-02-20,2025,62.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Wirral,efs,2025-02-20,2026,7.5,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Wirral,efs,2025-02-20,2025,18.641,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Woking,efs,2025-02-20,2026,74.6,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Woking,efs,2025-02-20,2025,93.6,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Worcestershire,efs,2025-02-20,2026,33.6,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Worthing,efs,2025-02-20,2026,4.75,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
+Barnet,efs,2026-02-23,2027,79.6,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Bedford,efs,2026-02-23,2027,58.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Bedford,efs,2026-02-23,2026,22.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Bradford,efs,2026-02-23,2027,78.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Brighton and Hove,efs,2026-02-23,2027,15.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Cheshire East,efs,2026-02-23,2027,35.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Croydon,efs,2026-02-23,2027,119.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Croydon,efs,2026-02-23,2026,110.3,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Cumberland,efs,2026-02-23,2027,11.834,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+East Sussex,efs,2026-02-23,2027,70.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Gloucester,efs,2026-02-23,2027,9.05,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Gloucester,efs,2026-02-23,2026,2.56,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Gloucester,efs,2026-02-23,2025,3.89,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Halton,efs,2026-02-23,2027,35.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Haringey,efs,2026-02-23,2027,84.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Havering,efs,2026-02-23,2027,77.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Hillingdon,efs,2026-02-23,2027,62.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Hillingdon,efs,2026-02-23,2026,88.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Isle of Wight,efs,2026-02-23,2027,12.9,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Isles of Scilly,efs,2026-02-23,2027,0.926,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Isles of Scilly,efs,2026-02-23,2026,1.195,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Lambeth,efs,2026-02-23,2027,20.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Lambeth,efs,2026-02-23,2026,46.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Lambeth,efs,2026-02-23,2025,50.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Medway,efs,2026-02-23,2027,10.126,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Medway,efs,2026-02-23,2026,28.469,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Peterborough,efs,2026-02-23,2027,5.68,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Peterborough,efs,2026-02-23,2026,4.039,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Redbridge,efs,2026-02-23,2027,70.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Redcar and Cleveland,efs,2026-02-23,2027,18.451,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Sefton,efs,2026-02-23,2027,12.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Shropshire,efs,2026-02-23,2027,121.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Shropshire,efs,2026-02-23,2026,71.4,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Slough,efs,2026-02-23,2027,42.899,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Somerset,efs,2026-02-23,2027,30,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Somerset,efs,2026-02-23,2026,45.118,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Stoke-on-Trent,efs,2026-02-23,2027,10.5,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Swindon,efs,2026-02-23,2027,22.3,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Thurrock,efs,2026-02-23,2027,68.91,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Thurrock,efs,2026-02-23,2025,73.02,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Thurrock,efs,2026-02-23,2026,62.11,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Trafford,efs,2026-02-23,2027,12.65,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Waltham Forest,efs,2026-02-23,2027,19.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Warrington,efs,2026-02-23,2027,92.047,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Warrington,efs,2026-02-23,2026,87.029,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+West Berkshire,efs,2026-02-23,2027,30.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+West Berkshire,efs,2026-02-23,2026,20.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Windsor and Maidenhead,efs,2026-02-23,2027,48.754,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Wirral,efs,2026-02-23,2027,6.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Woking,efs,2026-02-23,2027,58.1,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Worcestershire,efs,2026-02-23,2027,59.933,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Worthing,efs,2026-02-23,2027,5.0,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Worthing,efs,2026-02-23,2026,4.75,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Birmingham City Council,efs,2026-02-23,2021,99.5,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Birmingham City Council,efs,2026-02-23,2022,97.4,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Birmingham City Council,efs,2026-02-23,2023,169.6,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Birmingham City Council,efs,2026-02-23,2024,188.5,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Birmingham City Council,efs,2026-02-23,2025,405.7,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+Birmingham City Council,efs,2026-02-23,2026,36.7,primary,https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
