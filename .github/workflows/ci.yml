@@ -11,8 +11,8 @@ jobs:
       matrix:
         python: ["3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "${{ matrix.python }}", cache: pip }
       - run: pip install -e ".[dev]"
       - run: ruff check .
@@ -37,8 +37,8 @@ jobs:
     env:
       FAI_DATABASE_URL: postgresql+psycopg://radar:ci-only@localhost:5432/radar
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.13", cache: pip }
       - run: pip install -e ".[postgres]"
       - name: end-to-end on PostgreSQL
@@ -54,15 +54,26 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: docker build -t council-radar .
-      - uses: aquasecurity/trivy-action@0.28.0
+      - uses: aquasecurity/trivy-action@v0.36.0
         with: { image-ref: council-radar, severity: "CRITICAL,HIGH", exit-code: "1", ignore-unfixed: true }
 
   secrets:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { fetch-depth: 0 }
-      - uses: gitleaks/gitleaks-action@v2
-        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+      # Runs the official gitleaks image over the full history. Findings are
+      # redacted and raised as annotations so they show on the public run page.
+      - name: gitleaks (full history)
+        run: |
+          set +e
+          docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:latest \
+            git /repo --redact --no-banner --report-format json --report-path /repo/gitleaks.json
+          code=$?
+          set -e
+          if [ -s gitleaks.json ]; then
+            python3 -c "import json; [print(f\"::error file={f['File']},line={f['StartLine']}::gitleaks {f['RuleID']} in {f['Commit'][:7]}\") for f in json.load(open('gitleaks.json'))]"
+          fi
+          exit $code
