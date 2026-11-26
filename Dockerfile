@@ -3,7 +3,7 @@ FROM python:3.13-slim AS build
 WORKDIR /build
 COPY pyproject.toml README.md ./
 COPY src ./src
-RUN pip install --no-cache-dir --upgrade pip "setuptools>=78.1.1" \
+RUN pip install --no-cache-dir --upgrade pip \
  && pip wheel --no-cache-dir --wheel-dir /wheels ".[postgres]"
 
 FROM python:3.13-slim
@@ -14,9 +14,11 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/* \
  && useradd --create-home --uid 10001 radar
 COPY --from=build /wheels /wheels
-RUN pip install --no-cache-dir --upgrade pip "setuptools>=78.1.1" \
- && pip install --no-cache-dir /wheels/* \
- && rm -rf /wheels
+# Install the app, then remove pip and setuptools: neither is needed at runtime,
+# and pip vendors an old setuptools copy that scanners flag (CVE-2025-47273).
+RUN pip install --no-cache-dir /wheels/* \
+ && rm -rf /wheels \
+ && pip uninstall -y setuptools pip
 WORKDIR /app
 COPY --chown=radar:radar data ./data
 COPY --chown=radar:radar sql ./sql

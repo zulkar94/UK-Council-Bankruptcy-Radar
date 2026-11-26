@@ -56,11 +56,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: docker build -t council-radar .
-      - name: list python package metadata in image
-        run: |
-          docker run --rm --entrypoint sh council-radar -c \
-            "find / \( -name 'setuptools*.dist-info' -o -name 'setuptools*.egg-info' -o -name 'setuptools*.whl' \) 2>/dev/null" \
-            | while read -r p; do echo "::warning title=setuptools copy::$p"; done
+      - name: smoke test image
+        run: docker run --rm --read-only council-radar --help
       - uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: council-radar
