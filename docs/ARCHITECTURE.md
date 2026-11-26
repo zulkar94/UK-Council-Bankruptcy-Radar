@@ -14,7 +14,7 @@
                            │  ratios, 3-year trend, percentile within (tier, year)
                      domain.rules ──► fact_risk_score ──► sql/powerbi_views.sql ──► Power BI
                            │
-         finance_ai_core.eval (precision@k, lead time, walk-forward)   [backtest, next]
+   council_radar.backtest ─► rules_v1 · reserves_only · hgb ─► markdown / JSON report
          finance_ai_core.extraction + domain.s25                       [AI layer, next]
 ```
 
@@ -33,6 +33,7 @@
   - `signals`, `rules`, `s25`.
 - `ingest`: TOML specs and the file loader.
 - `db`: ORM models and the repository.
+- `backtest`: leakage-safe labels, walk-forward folds, three scorers judged on the same years, precision and recall at k, lead time, watchlist. Feature columns that are all blank or constant in a fold are dropped before fitting.
 - `cli`: `council-radar` commands.
 
 ## Schema notes
@@ -43,6 +44,5 @@
 
 ## Not built yet
 
-- ML model and backtest runner using `walk_forward` and `lead_times`.
 - Provider adapter for `LLMClient`, plus a PDF to text step for Section 25 statements.
 - Weighted re-attribution of predecessor values to successor councils using `CodeMap.resolve`. The map is loaded and validated but not yet applied in scoring.

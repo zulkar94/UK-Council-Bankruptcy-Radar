@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0 (2026-11-26)
+
+- Walk-forward backtest (`council-radar backtest`): rules_v1, reserves-only and HistGradientBoosting compared on the same years, with precision and recall at k, lead time, a watchlist, and markdown and JSON reports.
+- Leakage controls: 1 December decision date, rows after the first event dropped, training limited to closed outcome windows, `--observed-until` for event list completeness.
+- Richer synthetic panel: 45 councils over 10 years with healthy, distressed, recovering and shock profiles.
+- scikit-learn added as a dependency.
+
 ## 0.1.0 (2026-11-26)
 
 - Shared core: settings, SQLAlchemy base with a portable upsert, evaluation harness (precision and recall at k, lead time, walk-forward splits), AI extraction with citation checks and field-level scoring.
