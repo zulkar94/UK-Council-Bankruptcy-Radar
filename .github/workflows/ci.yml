@@ -69,13 +69,14 @@ jobs:
           python3 - <<'PY'
           import json, sys
           vulns = [
-              v
+              (r.get("Target"), v)
               for r in json.load(open("trivy.json")).get("Results", [])
               for v in r.get("Vulnerabilities") or []
           ]
-          for v in vulns:
+          for target, v in vulns:
+              where = v.get("PkgPath") or target
               print(f"::error title=trivy {v['Severity']}::{v['PkgName']} {v['InstalledVersion']} "
-                    f"-> {v.get('FixedVersion')} ({v['VulnerabilityID']})")
+                    f"-> {v.get('FixedVersion')} ({v['VulnerabilityID']}) at {where}")
           sys.exit(1 if vulns else 0)
           PY
 
