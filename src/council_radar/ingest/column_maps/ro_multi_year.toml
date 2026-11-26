@@ -1,0 +1,32 @@
+# MHCLG "Revenue outturn multi-year data set": Revenue_Outturn_time_series_data_v4.csv
+# https://www.gov.uk/government/statistics/local-authority-revenue-expenditure-and-financing-england-revenue-outturn-multi-year-data-set
+#
+# Confirmed from the gov.uk CSV preview and the data set guidance (26 Nov 2026):
+# - wide format, one row per authority per year, values in GBP thousands
+# - year_ending is YYYYMM (201803 = 2017-18), identifiers ONS_code and LA_name
+# - class and England total rows are included (codes like "E06"): skipped, not errors
+# - net current expenditure items are RS_<service>_net_exp
+#
+# NOT yet confirmed: the reserves and interest payable item names. They are in the
+# metadata workbook (Revenue_Outturn_metadata.ods). Add them under [columns] once
+# checked, e.g. reserves_unallocated = "RS_<item>_..." and list them in money_columns.
+
+[source]
+name = "ro_multi_year"
+description = "MHCLG revenue outturn multi-year data set"
+header_row = 0
+units_multiplier = 1000
+aggregate_code_regex = "E\\d{2}|E92000001"
+money_columns = ["net_revenue_expenditure", "social_care_spend"]
+
+[year]
+column = "year_ending"
+format = "yyyymm"
+
+[columns]
+ons_code = "ONS_code"
+name = "LA_name"
+# Proxy: total service net current expenditure. Swap for the net revenue
+# expenditure item once confirmed in the metadata workbook.
+net_revenue_expenditure = "RS_totsx_net_exp"
+social_care_spend = ["RS_asc_net_exp", "RS_csc_net_exp"]

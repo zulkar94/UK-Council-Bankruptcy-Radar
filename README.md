@@ -66,14 +66,21 @@ Everything in `data/sample/` is invented: names, codes (a `9xx` range that can't
 
 ## Using real data
 
-1. **Councils.** Download the Local Authority Districts and Counties names-and-codes lists from the ONS Open Geography Portal and save them as `councils.csv` with columns `ons_code,name`. Tier is inferred from the code prefix (E06 unitary, E07 district, E08 metropolitan, E09 London borough, E10 county).
-2. **Code changes.** Add reorganisations to a succession CSV (`old_code,new_code,effective,weight`). Splits need weights that sum to 1, for example population shares.
-3. **Finance.** Download the MHCLG revenue outturn multi-year data set, then:
+1. **Download** `Revenue_Outturn_time_series_data_v4.csv` (23 MB) and `Revenue_Outturn_metadata.ods` from the [MHCLG revenue outturn multi-year data set](https://www.gov.uk/government/statistics/local-authority-revenue-expenditure-and-financing-england-revenue-outturn-multi-year-data-set) into `data/raw/`.
+2. **Councils.** Build the council list from the same file, so no ONS download is needed:
    ```bash
-   council-radar inspect data/raw/<file>
+   council-radar extract-councils ro_multi_year data/raw/Revenue_Outturn_time_series_data_v4.csv
+   council-radar load-councils data/raw/councils.csv
    ```
-   Copy `src/council_radar/ingest/column_maps/ro_multi_year_TEMPLATE.toml`, replace each `TODO` with the real header, and ingest with `council-radar ingest path/to/your_map.toml data/raw/<file>`. Ingestion stops if codes or years fail validation; `--force` overrides it.
-4. **Labels.** `council-radar load-events data/reference/distress_events.csv`. Names that don't match, or match more than one council, are listed rather than guessed.
+   Tier comes from the code prefix (E06 unitary, E07 district, E08 metropolitan, E09 London borough, E10 county).
+3. **Finance.** `council-radar ingest ro_multi_year data/raw/Revenue_Outturn_time_series_data_v4.csv`. The built-in map reads the file's real layout: `year_ending` years like `201803`, values in £ thousands, England and class total rows skipped, and `Not set` treated as missing. Adult and children's social care are added together. Reserves and interest payable aren't mapped yet. Find their item names in the metadata workbook, add them to `src/council_radar/ingest/column_maps/ro_multi_year.toml`, and re-run. Until then, the reserves and debt signals are blank and the score reports lower coverage.
+4. **Code changes.** Add reorganisations to a succession CSV (`old_code,new_code,effective,weight`). Splits need weights that sum to 1.
+5. **Labels and backtest.**
+   ```bash
+   council-radar load-events data/reference/distress_events.csv
+   council-radar backtest --observed-until 2026-02-23 --out exports/backtest.md
+   ```
+   Names that don't match, or match more than one council, are listed rather than guessed.
 
 Sources and caveats for each file are in [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
 

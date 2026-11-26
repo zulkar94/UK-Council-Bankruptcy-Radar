@@ -6,6 +6,8 @@
 - Leakage controls: 1 December decision date, rows after the first event dropped, training limited to closed outcome windows, `--observed-until` for event list completeness.
 - Richer synthetic panel: 45 councils over 10 years with healthy, distressed, recovering and shock profiles.
 - scikit-learn added as a dependency.
+- Real MHCLG outturn layout: built-in `ro_multi_year` map, YYYYMM years, total rows skipped instead of rejected, `Not set` treated as missing, fields summed from several columns.
+- `council-radar extract-councils` builds the council list from the outturn file.
 
 ## 0.1.0 (2026-11-26)
 

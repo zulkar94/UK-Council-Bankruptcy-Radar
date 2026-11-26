@@ -172,3 +172,16 @@ def test_cli_reports_unmatched_and_ambiguous(
     out = capsys.readouterr().out
     assert "unmatched: Ghost" in out
     assert "ambiguous: Twin -> ['E06000901', 'E07000901']" in out
+
+
+def test_cli_real_layout_pipeline(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    fixture = Path(__file__).resolve().parents[1] / "fixtures" / "ro_layout_sample.csv"
+    db = ["--db", f"sqlite:///{tmp_path / 'ro.db'}"]
+    councils = tmp_path / "councils.csv"
+    assert main([*db, "init-db"]) == 0
+    assert main(["extract-councils", "ro_multi_year", str(fixture), "--out", str(councils)]) == 0
+    assert main([*db, "load-councils", str(councils)]) == 0
+    assert main([*db, "ingest", "ro_multi_year", str(fixture)]) == 0
+    out = capsys.readouterr().out
+    assert "councils written: 3" in out
+    assert "rows written: 4" in out

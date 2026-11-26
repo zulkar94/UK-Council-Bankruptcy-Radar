@@ -12,7 +12,13 @@ All sources are public. Raw downloads go in `data/raw/`, which git ignores. Only
 | Core spending power | MHCLG | Published with each local government finance settlement | Denominator for debt and commercial exposure. |
 | Council names and codes | ONS Open Geography Portal | geoportal.statistics.gov.uk | Local Authority Districts plus Counties lists. |
 
-Column headers for MHCLG files are **not** hard-coded. Run `council-radar inspect <file>` and fill in a copy of `ro_multi_year_TEMPLATE.toml`.
+The built-in map `ro_multi_year.toml` follows the real file, `Revenue_Outturn_time_series_data_v4.csv`, as checked against the gov.uk preview and guidance on 26 November 2026:
+- wide format, one row per authority per year, values in £ thousands
+- `year_ending` as YYYYMM, with identifiers `ONS_code` and `LA_name`
+- class and England total rows are included (skipped on load)
+- net current expenditure items named `RS_<service>_net_exp`
+
+Net revenue expenditure uses `RS_totsx_net_exp` (total service net current expenditure) as a stand-in. The reserves and interest payable item names still need confirming in `Revenue_Outturn_metadata.ods`. For any other file, run `council-radar inspect <file>` to list its headers.
 
 ## Labels: `data/reference/distress_events.csv`
 

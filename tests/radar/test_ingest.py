@@ -7,9 +7,11 @@ import pytest
 
 from council_radar.ingest.loader import (
     SpecMismatchError,
+    extract_councils,
     inspect_headers,
     load_frame,
     parse_fy,
+    parse_yyyymm,
 )
 from council_radar.ingest.spec import SourceSpec, builtin_spec, load_spec, parse_spec
 
@@ -125,9 +127,47 @@ def test_builtin_and_file_specs(tmp_path: Path) -> None:
     df, rep = load_frame(SAMPLE / "finance_year.csv", spec)
     assert rep.ok
     assert len(df) == FINANCE_ROWS
-    template = builtin_spec("ro_multi_year_TEMPLATE")
-    assert template.columns["ons_code"].startswith("TODO")
+    ro = builtin_spec("ro_multi_year")
+    assert ro.columns["social_care_spend"] == ("RS_asc_net_exp", "RS_csc_net_exp")
     p = tmp_path / "s.toml"
     p.write_text('[source]\nname="x"\n[year]\nfixed=2020\n[columns]\nons_code="C"\n')
     assert load_spec(p).fixed_year == 2020
     assert parse_spec({"source": {"name": "y"}, "year": {"fixed": 1}, "columns": {"ons_code": "C"}})
+
+
+RO_FIXTURE = SAMPLE.parents[1] / "tests" / "fixtures" / "ro_layout_sample.csv"
+
+
+def test_real_outturn_layout() -> None:
+    df, rep = load_frame(RO_FIXTURE, builtin_spec("ro_multi_year"))
+    assert rep.aggregate_rows == 2  # class total and England total skipped, not rejected
+    assert rep.bad_codes == []
+    assert rep.ok
+    by = df.set_index(["ons_code", "year"])
+    assert by.loc[("E06000001", 2018), "social_care_spend"] == 70_000_000
+    assert by.loc[("E06000001", 2018), "net_revenue_expenditure"] == 95_000_000
+    # "Not set" in one part of a sum leaves the other part; both missing gives NaN.
+    assert by.loc[("E06000001", 2019), "social_care_spend"] == 31_000_000
+    assert pd.isna(by.loc[("E06000999", 2018), "social_care_spend"])
+    assert rep.coerced_to_null["RS_asc_net_exp"] == 2
+    assert "totals_skipped=2" in rep.summary()
+
+
+def test_extract_councils_uses_latest_name() -> None:
+    df, _ = load_frame(RO_FIXTURE, builtin_spec("ro_multi_year"))
+    councils = extract_councils(df).set_index("ons_code")["name"]
+    assert councils["E06000001"] == "Hartlepool"
+    assert list(councils.index) == ["E06000001", "E06000999", "E07000217"]
+    with pytest.raises(ValueError, match="name column"):
+        extract_councils(df.drop(columns="name"))
+
+
+def test_parse_yyyymm() -> None:
+    assert parse_yyyymm("202503") == 2025
+    assert parse_yyyymm("2025") is None
+    assert parse_yyyymm("20250x") is None
+
+
+def test_text_columns_cannot_be_summed() -> None:
+    with pytest.raises(ValueError, match="text columns"):
+        SourceSpec(name="x", columns={"ons_code": ("A", "B")}, money_columns=(), fixed_year=2020)

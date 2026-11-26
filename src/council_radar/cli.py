@@ -18,8 +18,8 @@ from council_radar.db import repo
 from council_radar.db.models import create_schema
 from council_radar.domain.rules import rule_score
 from council_radar.domain.signals import compute_signals
-from council_radar.ingest.loader import inspect_headers, load_frame
-from council_radar.ingest.spec import builtin_spec, load_spec
+from council_radar.ingest.loader import extract_councils, inspect_headers, load_frame
+from council_radar.ingest.spec import SourceSpec, builtin_spec, load_spec
 from finance_ai_core.config import Settings
 from finance_ai_core.db import make_engine, session_scope
 
@@ -66,9 +66,23 @@ def cmd_load_codemap(args: argparse.Namespace) -> int:
     return 0
 
 
+def _spec(name_or_path: str) -> SourceSpec:
+    path = Path(name_or_path)
+    return load_spec(path) if path.suffix == ".toml" else builtin_spec(name_or_path)
+
+
+def cmd_extract_councils(args: argparse.Namespace) -> int:
+    frame, report = load_frame(Path(args.file), _spec(args.spec))
+    print(report.summary())
+    councils = extract_councils(frame)
+    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+    councils.to_csv(args.out, index=False)
+    print(f"councils written: {len(councils)} -> {args.out}")
+    return 0
+
+
 def cmd_ingest(args: argparse.Namespace) -> int:
-    spec_path = Path(args.spec)
-    spec = load_spec(spec_path) if spec_path.suffix == ".toml" else builtin_spec(args.spec)
+    spec = _spec(args.spec)
     frame, report = load_frame(Path(args.file), spec)
     print(report.summary())
     if report.bad_codes:
@@ -164,6 +178,12 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("file")
     sp.add_argument("--force", action="store_true", help="load even if validation flags issues")
     sp.set_defaults(fn=cmd_ingest)
+
+    sp = sub.add_parser("extract-councils", help="write a councils CSV from a finance file")
+    sp.add_argument("spec", help="built-in spec name or path to a .toml column map")
+    sp.add_argument("file")
+    sp.add_argument("--out", default="data/raw/councils.csv")
+    sp.set_defaults(fn=cmd_extract_councils)
 
     sp = sub.add_parser("inspect", help="print headers of a downloaded file")
     sp.add_argument("file")

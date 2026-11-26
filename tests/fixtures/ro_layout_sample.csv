@@ -1,0 +1,7 @@
+year_ending,ONS_code,LA_LGF_code,LA_name,status,LA_class,LA_subclass,RG_grantindsg_tot_grant,RS_asc_net_exp,RS_csc_net_exp,RS_totsx_net_exp
+201803,E06,UA,Unitary Authorities total,,Unitary Authority,Unitary Authority,5436305,900000,700000,4000000
+201803,E92000001,ENG,England total,,England,England,1,1,1,1
+201803,E06000001,E0701,Hartlepool UA,submitted,Unitary Authority,Unitary Authority,47938,40000,30000,"95,000"
+201903,E06000001,E0701,Hartlepool,submitted,Unitary Authority,Unitary Authority,48000,Not set,31000,97000
+201803,E07000217,E3640,Woking,submitted,Shire District,Shire District,0,0,0,"12,000"
+201803,E06000999,E0799,Made Up UA,submitted,Unitary Authority,Unitary Authority,1,Not set,Not set,Not set
