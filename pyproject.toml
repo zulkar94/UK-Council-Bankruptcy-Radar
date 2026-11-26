@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uk-council-bankruptcy-radar"
+version = "0.1.0"
+description = "Early-warning radar for English council finances: public-data ingestion, tier-aware signals and a baseline Section 114 / EFS risk score."
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Zulkar Nine" }]
+requires-python = ">=3.12"
+dependencies = [
+    "pandas>=2.2",
+    "sqlalchemy>=2.0",
+    "pydantic>=2.7",
+    "openpyxl>=3.1",
+    "odfpy>=1.4",
+]
+
+[project.urls]
+Repository = "https://github.com/zulkar94/UK-Council-Bankruptcy-Radar"
+
+[project.optional-dependencies]
+postgres = ["psycopg[binary]>=3.2"]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=5",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pandas-stubs>=2.2",
+    "bandit>=1.7",
+    "pip-audit>=2.7",
+]
+
+[project.scripts]
+council-radar = "council_radar.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+council_radar = ["ingest/column_maps/*.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --cov=finance_ai_core --cov=council_radar --cov-report=term-missing --cov-fail-under=90"
+
+[tool.coverage.run]
+branch = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "S", "N", "RUF", "PL", "PT"]
+ignore = ["PLR0913"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "PLR2004", "S608"]
+"scripts/**" = ["S311"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
+packages = ["finance_ai_core", "council_radar"]
+
+[tool.bandit]
+exclude_dirs = ["tests", "scripts"]
