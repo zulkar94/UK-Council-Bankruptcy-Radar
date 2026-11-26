@@ -13,7 +13,7 @@ from council_radar.ingest.loader import (
 )
 from council_radar.ingest.spec import SourceSpec, builtin_spec, load_spec, parse_spec
 
-from ..conftest import SAMPLE
+from ..conftest import FINANCE_ROWS, SAMPLE
 
 SPEC = SourceSpec(
     name="t",
@@ -124,7 +124,7 @@ def test_builtin_and_file_specs(tmp_path: Path) -> None:
     assert spec.units_multiplier == 1000
     df, rep = load_frame(SAMPLE / "finance_year.csv", spec)
     assert rep.ok
-    assert len(df) == 236
+    assert len(df) == FINANCE_ROWS
     template = builtin_spec("ro_multi_year_TEMPLATE")
     assert template.columns["ons_code"].startswith("TODO")
     p = tmp_path / "s.toml"

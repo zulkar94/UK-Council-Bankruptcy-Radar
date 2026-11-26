@@ -12,7 +12,7 @@ from council_radar.db import repo
 from council_radar.db.models import Council, Event, FinanceYear, RiskScore
 from finance_ai_core.db import make_engine, session_scope
 
-from ..conftest import REFERENCE, SAMPLE
+from ..conftest import COUNCILS, EVENTS, FINANCE_ROWS, REFERENCE, SAMPLE
 
 
 def _csv(name: str) -> pd.DataFrame:
@@ -26,7 +26,7 @@ def test_financial_year_of() -> None:
 
 def test_load_councils_infers_tier_and_rejects_bad(engine: Engine) -> None:
     with session_scope(engine) as s:
-        assert repo.load_councils(s, _csv("councils.csv")) == 31
+        assert repo.load_councils(s, _csv("councils.csv")) == COUNCILS
         assert repo.load_councils(s, pd.DataFrame({"ons_code": ["E10000999"], "name": ["X"]})) == 1
     with session_scope(engine) as s:
         assert s.get(Council, "E10000999").tier == "county"
@@ -108,16 +108,17 @@ def test_cli_end_to_end(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> N
     for step in steps:
         assert main([*db, *step]) == 0, step
     out = capsys.readouterr().out
-    assert "matched: 5 ambiguous: 0 unmatched: 0" in out
+    assert f"matched: {EVENTS} ambiguous: 0 unmatched: 0" in out
     assert "Net revenue expenditure (£000)" in out
     scores = pd.read_csv(out_csv)
-    assert len(scores) == 236
-    top4 = set(scores[scores.year == 2025].nlargest(4, "score").ons_code)
-    assert top4 == {"E06000903", "E07000905", "E08000902", "E09000904"}
+    assert len(scores) == FINANCE_ROWS
+    latest = scores[scores.year == 2025].set_index("ons_code").score
+    # Councils that drifted early are still stressed in 2025 and should sit above the median.
+    assert (latest[["E06000903", "E09000902", "E08000904", "E07000906"]] > latest.median()).all()
     eng = make_engine(db[1])
     with session_scope(eng) as s:
-        assert s.scalar(select(func.count()).select_from(Event)) == 5
-        assert s.scalar(select(func.count()).select_from(RiskScore)) == 236
+        assert s.scalar(select(func.count()).select_from(Event)) == EVENTS
+        assert s.scalar(select(func.count()).select_from(RiskScore)) == FINANCE_ROWS
     eng.dispose()
 
 

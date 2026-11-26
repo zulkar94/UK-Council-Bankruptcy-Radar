@@ -14,6 +14,16 @@ SAMPLE = ROOT / "data" / "sample"
 REFERENCE = ROOT / "data" / "reference"
 
 
+def _rows(name: str) -> int:
+    with (SAMPLE / name).open() as fh:
+        return sum(1 for _ in fh) - 1
+
+
+COUNCILS = _rows("councils.csv")
+FINANCE_ROWS = _rows("finance_year.csv")
+EVENTS = _rows("events.csv")
+
+
 @pytest.fixture
 def engine(tmp_path: Path) -> Iterator[Engine]:
     eng = make_engine(f"sqlite:///{tmp_path / 'test.db'}")

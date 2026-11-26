@@ -1,6 +1,13 @@
 council_name,event_type,event_date,financial_year,amount_gbp_m,verification,source_url
-Calderford Council,s114,2024-11-14,,,primary,synthetic
-Millbourne Council,efs,2025-02-20,2026,10.0,primary,synthetic
-Thornwick Council,efs,2025-02-20,2026,10.0,primary,synthetic
-Dovecliff Council,s114,2025-01-09,,,primary,synthetic
-Elmstead Council,efs,2025-02-20,2026,10.0,primary,synthetic
+Uptonmere Council,s114,2019-11-10,,,primary,synthetic
+Kestrelhollow Council,efs,2020-02-20,2021,53.6,primary,synthetic
+Westermere Council,efs,2020-02-20,2021,41.5,primary,synthetic
+Dunhollow Council,s114,2021-11-13,,,primary,synthetic
+Dunmere Council,efs,2022-02-20,2023,24.8,primary,synthetic
+Ashmere Council,s114,2021-11-09,,,primary,synthetic
+Ivyhollow Council,efs,2023-02-20,2024,57.3,primary,synthetic
+Ravenmere Council,efs,2022-02-20,2023,39.0,primary,synthetic
+Brookford Council,efs,2024-02-20,2025,31.1,primary,synthetic
+Pennford Council,s114,2023-11-20,,,primary,synthetic
+Junipermere Council,efs,2022-02-20,2023,50.3,primary,synthetic
+Kestrelmere Council,s114,2021-11-23,,,primary,synthetic
