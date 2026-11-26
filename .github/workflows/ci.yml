@@ -1,0 +1,68 @@
+name: ci
+on:
+  push: { branches: [main] }
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.python }}", cache: pip }
+      - run: pip install -e ".[dev]"
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: mypy
+      - run: bandit -q -c pyproject.toml -r src
+      - run: pytest -W error
+      - name: audit project dependencies only
+        run: |
+          pip freeze --exclude-editable > /tmp/requirements.txt
+          pip-audit -r /tmp/requirements.txt --disable-pip --no-deps
+
+  postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env: { POSTGRES_DB: radar, POSTGRES_USER: radar, POSTGRES_PASSWORD: ci-only }
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U radar" --health-interval 5s --health-retries 10
+    env:
+      FAI_DATABASE_URL: postgresql+psycopg://radar:ci-only@localhost:5432/radar
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13", cache: pip }
+      - run: pip install -e ".[postgres]"
+      - name: end-to-end on PostgreSQL
+        run: |
+          council-radar init-db
+          council-radar load-councils data/sample/councils.csv
+          council-radar load-codemap data/sample/code_succession.csv
+          council-radar ingest sample_finance_year data/sample/finance_year.csv
+          council-radar load-events data/sample/events.csv
+          council-radar score --top 5
+          psql "postgresql://radar:ci-only@localhost:5432/radar" -v ON_ERROR_STOP=1 -f sql/powerbi_views.sql
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t council-radar .
+      - uses: aquasecurity/trivy-action@0.28.0
+        with: { image-ref: council-radar, severity: "CRITICAL,HIGH", exit-code: "1", ignore-unfixed: true }
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: gitleaks/gitleaks-action@v2
+        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
