@@ -18,7 +18,7 @@ The built-in map `ro_multi_year.toml` follows the real file, `Revenue_Outturn_ti
 - class and England total rows are included (skipped on load)
 - net current expenditure items named `RS_<service>_net_exp`
 
-Net revenue expenditure uses `RS_totsx_net_exp` (total service net current expenditure) as a stand-in. The reserves and interest payable item names still need confirming in `Revenue_Outturn_metadata.ods`. For any other file, run `council-radar inspect <file>` to list its headers.
+Item names were confirmed against the `Data_dictionary` sheet of `Revenue_Outturn_metadata.ods` on 27 November 2026. They're listed at the top of the column map. DSG balances are negative when in deficit, so the map flips the sign. For any other file, run `council-radar inspect <file>` to list its headers.
 
 ## Labels: `data/reference/distress_events.csv`
 
@@ -46,6 +46,8 @@ Net revenue expenditure uses `RS_totsx_net_exp` (total service net current expen
 
 - 2025-26 round, decisions published 20 February 2025: https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
 - 2026-27 round, decisions published 23 February 2026: https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
+
+An optional `ons_code` column pins names that are ambiguous or worded differently in the outturn file: Somerset (E06000066, the unitary from April 2023, not the former county) and Medway (E06000035, "Medway Towns UA").
 
 `financial_year` is the year the support covers, as an ending year (2026 means 2025-26). Amounts are £m as published, using revised figures where the page gives them.
 

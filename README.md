@@ -6,7 +6,7 @@
 
 An early-warning score for English councils at risk of a Section 114 notice or Exceptional Financial Support (EFS), built from public MHCLG and ONS data. It sits on a small shared core (`finance_ai_core`) that later finance AI projects will reuse.
 
-> **Headline result:** not yet available for real councils. The backtest runs end to end on synthetic data (below), but real MHCLG data hasn't been loaded yet. When it has, this line will say how many councils that later needed support were flagged, and how far ahead.
+> **Headline result (real MHCLG data, 2022 and 2023):** flagging 20 councils a year, the transparent score found 9 of the 27 that went on to a Section 114 notice or Exceptional Financial Support, at about 6 times the random rate and a median of 812 days ahead. At 10 a year it found only 1, and the ML model was no better than chance. It's indicative, not proven: two evaluation years, and no borrowing data yet. Full results in [docs/REAL_RESULTS.md](docs/REAL_RESULTS.md).
 
 ## Status (v0.1)
 
@@ -15,10 +15,11 @@ An early-warning score for English councils at risk of a Section 114 notice or E
 | Shared core: evaluation harness, AI extraction with citation checks, portable upsert | Map real MHCLG revenue outturn headers (template provided) |
 | Council Radar ingestion: CSV, XLSX and ODS; column maps in TOML; validation reports | Load ONS council list, borrowing and core spending power tables |
 | ONS code succession (merges and splits), name matching for government lists | Section 25 statement extraction on 50 hand-labelled documents |
-| Signals ranked within tier, transparent baseline score | Run the backtest on real data and publish the result |
+| Signals ranked within tier, transparent baseline score | Borrowing and investment tables (debt and commercial signals) |
 | Walk-forward backtest: rules vs reserves-only vs HistGradientBoosting | Power BI report on the views in `sql/powerbi_views.sql` |
 | Real reference labels: 8 Section 114 notices, 104 EFS decisions (2025-26 and 2026-27 rounds) | Earlier EFS rounds (2024-25 and before) |
-| Tested on SQLite and PostgreSQL 16; 72 tests, 99% coverage | |
+| Real-data backtest on the MHCLG outturn file ([results](docs/REAL_RESULTS.md)) | Core spending power from the finance settlements |
+| Tested on SQLite and PostgreSQL 16; 79 tests, 99% coverage | |
 
 ## Quickstart (synthetic sample, about 1 minute)
 
@@ -73,14 +74,14 @@ Everything in `data/sample/` is invented: names, codes (a `9xx` range that can't
    council-radar load-councils data/raw/councils.csv
    ```
    Tier comes from the code prefix (E06 unitary, E07 district, E08 metropolitan, E09 London borough, E10 county).
-3. **Finance.** `council-radar ingest ro_multi_year data/raw/Revenue_Outturn_time_series_data_v4.csv`. The built-in map reads the file's real layout: `year_ending` years like `201803`, values in £ thousands, England and class total rows skipped, and `Not set` treated as missing. Adult and children's social care are added together. Reserves and interest payable aren't mapped yet. Find their item names in the metadata workbook, add them to `src/council_radar/ingest/column_maps/ro_multi_year.toml`, and re-run. Until then, the reserves and debt signals are blank and the score reports lower coverage.
+3. **Finance.** `council-radar ingest ro_multi_year data/raw/Revenue_Outturn_time_series_data_v4.csv`. The built-in map reads the file's real layout: `year_ending` years like `201803`, values in £ thousands, total rows skipped, police, fire and other non-council bodies dropped, and `Not set` treated as missing. Item names come from the metadata workbook and are listed in `src/council_radar/ingest/column_maps/ro_multi_year.toml`. The file has no borrowing, commercial property or core spending power, so those signals stay blank.
 4. **Code changes.** Add reorganisations to a succession CSV (`old_code,new_code,effective,weight`). Splits need weights that sum to 1.
 5. **Labels and backtest.**
    ```bash
    council-radar load-events data/reference/distress_events.csv
    council-radar backtest --observed-until 2026-02-23 --out exports/backtest.md
    ```
-   Names that don't match, or match more than one council, are listed rather than guessed.
+   Names that don't match, or match more than one council, are listed rather than guessed. Rows with an `ons_code` in the reference file are pinned to that council (used for Somerset and Medway).
 
 Sources and caveats for each file are in [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
 

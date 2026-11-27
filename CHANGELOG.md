@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 (2026-11-27)
+
+- Real-data backtest on the MHCLG revenue outturn file: results in `docs/REAL_RESULTS.md`.
+- Column map completed from the metadata workbook: net revenue expenditure, unallocated and earmarked reserves, DSG deficit (sign flipped so deficits are positive), interest payable.
+- Loader: keep only council codes, per-field scale factors, wider total-row pattern.
+- Event loading: optional `ons_code` column pins ambiguous names (Somerset, Medway); RO name suffixes (UA, BC, MBC, CC, DC, LB) ignored when matching.
+- Backtest reports base rate and lift against random picking.
+
 ## 0.2.0 (2026-11-26)
 
 - Walk-forward backtest (`council-radar backtest`): rules_v1, reserves-only and HistGradientBoosting compared on the same years, with precision and recall at k, lead time, a watchlist, and markdown and JSON reports.
