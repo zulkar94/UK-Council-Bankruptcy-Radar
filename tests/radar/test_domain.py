@@ -163,3 +163,11 @@ def test_rule_score_validates_weights() -> None:
         rule_score(s, {"vibes": 1.0})
     with pytest.raises(ValueError, match="positive"):
         rule_score(s, {"debt_to_csp": 0.0})
+
+
+def test_debt_ratio_falls_back_to_nre() -> None:
+    p = panel()
+    p["core_spending_power"] = float("nan")
+    s = compute_signals(p)
+    row = s[(s.ons_code == "E06000902") & (s.year == 2020)].iloc[0]
+    assert row.debt_to_csp == pytest.approx(400 / 100)

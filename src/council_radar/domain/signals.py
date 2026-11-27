@@ -61,8 +61,13 @@ def compute_signals(df: pd.DataFrame) -> pd.DataFrame:
     year_gap = d["year"] - d.groupby("ons_code")["year"].shift(TREND_YEARS)
     # Only a true 3-year change counts; gaps in the series give NaN, not a wrong delta.
     d["reserves_change_3y"] = (d["reserves_to_nre"] - prior).where(year_gap == TREND_YEARS)
-    d["debt_to_csp"] = _safe_div(d["external_borrowing"], d["core_spending_power"])
-    d["commercial_to_csp"] = _safe_div(d["commercial_property"], d["core_spending_power"])
+    # Core spending power is the preferred denominator; where it is missing (it is not in
+    # the outturn file) fall back to net revenue expenditure so debt signals still work.
+    denom = d["core_spending_power"].where(
+        d["core_spending_power"].notna(), d["net_revenue_expenditure"]
+    )
+    d["debt_to_csp"] = _safe_div(d["external_borrowing"], denom)
+    d["commercial_to_csp"] = _safe_div(d["commercial_property"], denom)
     d["interest_to_nre"] = _safe_div(d["interest_cost"], d["net_revenue_expenditure"])
     d["dsg_deficit_to_reserves"] = _safe_div(d["dsg_deficit"], usable)
     d["social_care_share"] = _safe_div(d["social_care_spend"], d["net_revenue_expenditure"])
