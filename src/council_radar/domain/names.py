@@ -24,6 +24,13 @@ _STOP = {
     "royal",
     "the",
     "unitary",
+    # suffixes used in MHCLG returns ("Thurrock UA", "Woking BC")
+    "ua",
+    "bc",
+    "mbc",
+    "cc",
+    "dc",
+    "lb",
 }
 _PUNCT = re.compile(r"[^a-z0-9 ]+")
 

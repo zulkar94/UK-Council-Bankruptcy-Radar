@@ -81,6 +81,8 @@ def test_name_matching_real_variants() -> None:
     assert m.ambiguous == {"Ashvale": ["E06000999", "E07000001"]}
     assert m.unmatched == ["Nowhere"]
     assert normalise_name("Royal Borough of Windsor & Maidenhead") == "windsor and maidenhead"
+    assert normalise_name("Thurrock UA") == normalise_name("Thurrock")
+    assert normalise_name("Woking BC") == "woking"
 
 
 def panel(n_years: int = 5) -> pd.DataFrame:

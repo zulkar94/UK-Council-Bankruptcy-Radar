@@ -140,17 +140,22 @@ RO_FIXTURE = SAMPLE.parents[1] / "tests" / "fixtures" / "ro_layout_sample.csv"
 
 def test_real_outturn_layout() -> None:
     df, rep = load_frame(RO_FIXTURE, builtin_spec("ro_multi_year"))
-    assert rep.aggregate_rows == 2  # class total and England total skipped, not rejected
+    assert rep.aggregate_rows == 3  # class, England and "other" totals skipped, not rejected
+    assert rep.out_of_scope_rows == 1  # police body: valid code, not a council
     assert rep.bad_codes == []
     assert rep.ok
     by = df.set_index(["ons_code", "year"])
     assert by.loc[("E06000001", 2018), "social_care_spend"] == 70_000_000
     assert by.loc[("E06000001", 2018), "net_revenue_expenditure"] == 95_000_000
+    # DSG balances are negative in deficit; the map flips the sign so a deficit is positive.
+    assert by.loc[("E06000001", 2018), "dsg_deficit"] == 1_500_000
+    assert by.loc[("E06000001", 2019), "dsg_deficit"] == 2_500_000
+    assert by.loc[("E06000001", 2019), "reserves_unallocated"] == 4_000_000
     # "Not set" in one part of a sum leaves the other part; both missing gives NaN.
     assert by.loc[("E06000001", 2019), "social_care_spend"] == 31_000_000
     assert pd.isna(by.loc[("E06000999", 2018), "social_care_spend"])
     assert rep.coerced_to_null["RS_asc_net_exp"] == 2
-    assert "totals_skipped=2" in rep.summary()
+    assert "totals_skipped=3 out_of_scope=1" in rep.summary()
 
 
 def test_extract_councils_uses_latest_name() -> None:
@@ -171,3 +176,10 @@ def test_parse_yyyymm() -> None:
 def test_text_columns_cannot_be_summed() -> None:
     with pytest.raises(ValueError, match="text columns"):
         SourceSpec(name="x", columns={"ons_code": ("A", "B")}, money_columns=(), fixed_year=2020)
+
+
+def test_scale_must_reference_mapped_field() -> None:
+    with pytest.raises(ValueError, match="scale fields"):
+        SourceSpec(
+            name="x", columns={"ons_code": "C"}, money_columns=(), fixed_year=2020, scale={"y": -1}
+        )

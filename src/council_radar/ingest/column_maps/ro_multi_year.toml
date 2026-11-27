@@ -1,23 +1,31 @@
 # MHCLG "Revenue outturn multi-year data set": Revenue_Outturn_time_series_data_v4.csv
 # https://www.gov.uk/government/statistics/local-authority-revenue-expenditure-and-financing-england-revenue-outturn-multi-year-data-set
 #
-# Confirmed from the gov.uk CSV preview and the data set guidance (26 Nov 2026):
-# - wide format, one row per authority per year, values in GBP thousands
-# - year_ending is YYYYMM (201803 = 2017-18), identifiers ONS_code and LA_name
-# - class and England total rows are included (codes like "E06"): skipped, not errors
-# - net current expenditure items are RS_<service>_net_exp
+# Item names confirmed against Revenue_Outturn_metadata.ods (Data_dictionary sheet), 27 Nov 2026:
+#   RS_netrevexp_net_exp  NET REVENUE EXPENDITURE (RS line 805)
+#   RS_resunall_end_cy    Unallocated financial reserves level - end (from 2017-18)
+#   RS_resoth_end_cy      Other earmarked financial reserves level - end (from 2017-18)
+#   RS_resdsg_end_cy      Dedicated Schools Grant reserves level - end (from 2018-19)
+#   RS_resdsgadj_end_cy   DSG Adjustment Account level - end (from 2022-23)
+#   RS_intextpay_net_exp  Interest payable and similar charges
+#   RS_asc_net_exp, RS_csc_net_exp  adult and children's social care, net current expenditure
+# Wide format, one row per authority per year, GBP thousands, year_ending as YYYYMM.
+# DSG balances are negative when in deficit, so dsg_deficit = -(reserve + adjustment account).
 #
-# NOT yet confirmed: the reserves and interest payable item names. They are in the
-# metadata workbook (Revenue_Outturn_metadata.ods). Add them under [columns] once
-# checked, e.g. reserves_unallocated = "RS_<item>_..." and list them in money_columns.
+# Not in this file: external borrowing, commercial property and core spending power.
+# Those signals stay blank until the borrowing and settlement tables are added.
 
 [source]
 name = "ro_multi_year"
 description = "MHCLG revenue outturn multi-year data set"
 header_row = 0
 units_multiplier = 1000
-aggregate_code_regex = "E\\d{2}|E92000001"
-money_columns = ["net_revenue_expenditure", "social_care_spend"]
+aggregate_code_regex = "[A-Z]{1,4}|E\\d{2,4}|E92000001"
+keep_code_regex = "E(06|07|08|09|10)\\d{6}"
+money_columns = [
+  "net_revenue_expenditure", "reserves_unallocated", "reserves_earmarked",
+  "dsg_deficit", "interest_cost", "social_care_spend",
+]
 
 [year]
 column = "year_ending"
@@ -26,7 +34,12 @@ format = "yyyymm"
 [columns]
 ons_code = "ONS_code"
 name = "LA_name"
-# Proxy: total service net current expenditure. Swap for the net revenue
-# expenditure item once confirmed in the metadata workbook.
-net_revenue_expenditure = "RS_totsx_net_exp"
+net_revenue_expenditure = "RS_netrevexp_net_exp"
+reserves_unallocated = "RS_resunall_end_cy"
+reserves_earmarked = "RS_resoth_end_cy"
+dsg_deficit = ["RS_resdsg_end_cy", "RS_resdsgadj_end_cy"]
+interest_cost = "RS_intextpay_net_exp"
 social_care_spend = ["RS_asc_net_exp", "RS_csc_net_exp"]
+
+[scale]
+dsg_deficit = -1

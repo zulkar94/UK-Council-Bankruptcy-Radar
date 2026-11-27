@@ -185,3 +185,22 @@ def test_cli_real_layout_pipeline(tmp_path: Path, capsys: pytest.CaptureFixture[
     out = capsys.readouterr().out
     assert "councils written: 3" in out
     assert "rows written: 4" in out
+
+
+def test_events_pinned_by_code(engine: Engine) -> None:
+    with session_scope(engine) as s:
+        repo.load_councils(
+            s,
+            pd.DataFrame(
+                {
+                    "ons_code": ["E06000066", "E10000027", "E06000035"],
+                    "name": ["Somerset", "Somerset CC", "Medway Towns UA"],
+                }
+            ),
+        )
+        m = repo.load_events(
+            s, pd.read_csv(REFERENCE / "distress_events.csv", dtype=str, keep_default_na=False)
+        )
+        assert m.matched["Somerset"] == "E06000066"
+        assert m.matched["Medway"] == "E06000035"
+        assert "Somerset" not in m.ambiguous

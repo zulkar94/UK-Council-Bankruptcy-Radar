@@ -105,6 +105,7 @@ def test_skip_reasons(sample: tuple[pd.DataFrame, pd.DataFrame]) -> None:
         panel, events, BacktestConfig(k=5, min_train_positives=999, observed_until=OBSERVED)
     )
     assert strict.eval_years == []
+    assert all(m.lift is None and m.base_rate == 0.0 for m in strict.models.values())
     assert any("not enough training positives for hgb" in r for r in strict.skipped_years.values())
     assert "No year could be evaluated" in render_markdown(strict)
 
@@ -129,6 +130,9 @@ def test_full_backtest_report(sample: tuple[pd.DataFrame, pd.DataFrame]) -> None
         assert 0.0 <= m.recall <= 1.0
         assert len(m.caught) + len(m.missed) == 9
         assert m.median_lead_days is None or m.median_lead_days > 0
+        assert 0.0 < m.base_rate < 1.0
+        assert m.lift is not None
+        assert m.lift == pytest.approx(m.precision / m.base_rate)
     assert rep.watchlist_year == 2025
     # Councils already in distress are never on the watchlist.
     distressed = set(first_events(events))
@@ -136,6 +140,8 @@ def test_full_backtest_report(sample: tuple[pd.DataFrame, pd.DataFrame]) -> None
         assert not {c for c, _ in items} & distressed
     md = render_markdown(rep, {"E06000909": "Somewhere Council"})
     assert "| rules_v1 |" in md
+    assert "Base rate:" in md
+    assert "Lift vs random" in md
     assert "Watchlist for 2025" in md
     data = json.loads(rep.to_json())
     assert data["config"]["observed_until"] == "2025-03-31"

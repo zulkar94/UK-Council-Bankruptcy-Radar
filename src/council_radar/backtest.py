@@ -123,6 +123,7 @@ class ModelResult:
     name: str
     years: list[int] = field(default_factory=list)
     positives: int = 0
+    at_risk: int = 0
     true_positives: int = 0
     flags: int = 0
     per_year: list[dict[str, float | int]] = field(default_factory=list)
@@ -136,6 +137,15 @@ class ModelResult:
     @property
     def recall(self) -> float:
         return self.true_positives / self.positives if self.positives else 0.0
+
+    @property
+    def base_rate(self) -> float:
+        """Share of at-risk councils that had an event: what random picking would score."""
+        return self.positives / self.at_risk if self.at_risk else 0.0
+
+    @property
+    def lift(self) -> float | None:
+        return self.precision / self.base_rate if self.base_rate else None
 
     @property
     def median_lead_days(self) -> float | None:
@@ -164,6 +174,9 @@ class BacktestReport:
                         "precision_at_k": round(m.precision, 3),
                         "recall_at_k": round(m.recall, 3),
                         "positives": m.positives,
+                        "at_risk": m.at_risk,
+                        "base_rate": round(m.base_rate, 4),
+                        "lift": round(m.lift, 2) if m.lift is not None else None,
                         "true_positives": m.true_positives,
                         "flags": m.flags,
                         "events_caught": len(m.caught),
@@ -233,6 +246,7 @@ def run_backtest(
             r = results[name]
             r.years.append(y)
             r.positives += len(positives)
+            r.at_risk += len(scores)
             r.true_positives += tp
             r.flags += k
             r.per_year.append(
@@ -294,14 +308,24 @@ def render_markdown(rep: BacktestReport, names: Mapping[str, str] | None = None)
         lines += ["No year could be evaluated. Reasons:", ""]
     if rep.models and rep.eval_years:
         lines += [
-            "| Model | Precision@k | Recall@k | Events caught | Median lead (days) |",
-            "|---|---|---|---|---|",
+            "| Model | Precision@k | Lift vs random | Recall@k | Events caught "
+            "| Median lead (days) |",
+            "|---|---|---|---|---|---|",
         ]
         for m in rep.models.values():
             lead = f"{m.median_lead_days:.0f}" if m.median_lead_days is not None else "-"
+            lift = f"{m.lift:.1f}x" if m.lift is not None else "-"
             caught = f"{len(m.caught)} of {len(m.caught) + len(m.missed)}"
-            lines.append(f"| {m.name} | {m.precision:.2f} | {m.recall:.2f} | {caught} | {lead} |")
-        lines.append("")
+            lines.append(
+                f"| {m.name} | {m.precision:.2f} | {lift} | {m.recall:.2f} | {caught} | {lead} |"
+            )
+        first = next(iter(rep.models.values()))
+        lines += [
+            "",
+            f"Base rate: {first.base_rate:.1%} of at-risk council-years had an event within the "
+            "horizon, so random picking scores that precision and a lift of 1.0x.",
+            "",
+        ]
     if rep.skipped_years:
         lines += ["Skipped years:", ""]
         lines += [f"- {y}: {why}" for y, why in sorted(rep.skipped_years.items())]

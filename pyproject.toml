@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "uk-council-bankruptcy-radar"
-version = "0.2.0"
+version = "0.3.0"
 description = "Early-warning radar for English council finances: public-data ingestion, tier-aware signals and a baseline Section 114 / EFS risk score."
 readme = "README.md"
 license = "MIT"

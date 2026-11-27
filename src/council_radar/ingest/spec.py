@@ -25,6 +25,8 @@ class SourceSpec:
     year_format: YearFormat = "int"
     fixed_year: int | None = None
     aggregate_code_regex: str | None = None  # codes of total rows to skip, not reject
+    keep_code_regex: str | None = None  # valid codes outside scope (police, fire) are dropped
+    scale: dict[str, float] = field(default_factory=dict)  # per-field factor, e.g. -1 to flip sign
     description: str = ""
     extra: dict[str, Any] = field(default_factory=dict)
 
@@ -41,6 +43,9 @@ class SourceSpec:
             raise ValueError(f"spec {self.name!r} needs exactly one of year.column or year.fixed")
         if any(not isinstance(self.columns[c], str) for c in TEXT_COLUMNS & set(self.columns)):
             raise ValueError(f"spec {self.name!r}: text columns cannot be summed")
+        unscaled = set(self.scale) - set(self.columns)
+        if unscaled:
+            raise ValueError(f"spec {self.name!r} scale fields not mapped: {sorted(unscaled)}")
         bad = set(self.money_columns) - set(self.columns)
         if bad:
             raise ValueError(f"spec {self.name!r} money columns not mapped: {sorted(bad)}")
@@ -57,6 +62,8 @@ def parse_spec(data: dict[str, Any]) -> SourceSpec:
         units_multiplier=float(src.get("units_multiplier", 1.0)),
         columns={k: v if isinstance(v, str) else tuple(v) for k, v in data["columns"].items()},
         aggregate_code_regex=src.get("aggregate_code_regex"),
+        keep_code_regex=src.get("keep_code_regex"),
+        scale={k: float(v) for k, v in data.get("scale", {}).items()},
         money_columns=tuple(src.get("money_columns", [])),
         year_column=year.get("column"),
         year_format=year.get("format", "int"),

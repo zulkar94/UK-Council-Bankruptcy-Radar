@@ -50,6 +50,7 @@ class ValidationReport:
     duplicate_keys: int = 0
     bad_years: int = 0
     aggregate_rows: int = 0
+    out_of_scope_rows: int = 0
 
     @property
     def ok(self) -> bool:
@@ -61,6 +62,7 @@ class ValidationReport:
             f"[{self.source}] in={self.rows_in} out={self.rows_out} "
             f"bad_codes={len(self.bad_codes)} bad_years={self.bad_years} "
             f"dupes={self.duplicate_keys} totals_skipped={self.aggregate_rows} "
+            f"out_of_scope={self.out_of_scope_rows} "
             f"nulls_from_markers={nulls}"
         )
 
@@ -138,7 +140,12 @@ def _filter_codes(df: pd.DataFrame, spec: SourceSpec, report: ValidationReport) 
         df = df[~is_total]
     valid = df["ons_code"].str.match(ONS_CODE)
     report.bad_codes = sorted(df.loc[~valid, "ons_code"].unique().tolist())
-    return df[valid].copy()
+    df = df[valid]
+    if spec.keep_code_regex:
+        keep = df["ons_code"].str.fullmatch(spec.keep_code_regex)
+        report.out_of_scope_rows = int((~keep).sum())
+        df = df[keep]
+    return df.copy()
 
 
 def _apply_year(
@@ -166,7 +173,8 @@ def _coerce_numbers(df: pd.DataFrame, spec: SourceSpec, report: ValidationReport
                 report.coerced_to_null[col] = nulls
         else:
             num = df[col]
-        df[col] = num * spec.units_multiplier if col in spec.money_columns else num
+        factor = spec.scale.get(col, 1.0)
+        df[col] = num * factor * (spec.units_multiplier if col in spec.money_columns else 1.0)
 
 
 def load_frame(path: Path, spec: SourceSpec) -> tuple[pd.DataFrame, ValidationReport]:

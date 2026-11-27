@@ -126,7 +126,16 @@ def load_events(session: Session, df: pd.DataFrame) -> MatchResult:
     councils = {
         code: name for code, name in session.execute(select(Council.ons_code, Council.name))
     }
-    match = match_names(df["council_name"].astype(str), councils)
+    # An explicit ons_code column pins rows whose names are ambiguous or differ from ONS,
+    # e.g. Somerset (county until 2023, then a unitary) or "Medway Towns UA".
+    pinned = {
+        str(r["council_name"]): str(r["ons_code"]).strip().upper()
+        for r in _records(df)
+        if str(r.get("ons_code") or "").strip().upper() in councils
+    }
+    unpinned = df.loc[~df["council_name"].astype(str).isin(pinned), "council_name"]
+    match = match_names(unpinned.astype(str), councils)
+    match.matched.update(pinned)
     rows: dict[tuple[str, str, int], dict[str, Any]] = {}
     for r in sorted(_records(df), key=lambda x: str(x["event_date"])):
         code = match.matched.get(str(r["council_name"]))
