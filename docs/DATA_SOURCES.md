@@ -42,7 +42,7 @@ Item names were confirmed against the `Data_dictionary` sheet of `Revenue_Outtur
 - **Hillingdon and Hackney (2000).** These predate the finance data.
 - **Northamptonshire's second notice (July 2018) and Birmingham's supplementary notice (21 September 2023).** Only the first notice matters for early-warning lead time.
 
-### Exceptional Financial Support (104 rows)
+### Exceptional Financial Support (165 rows)
 
 - 2025-26 round, decisions published 20 February 2025: https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2025-26
 - 2026-27 round, decisions published 23 February 2026: https://www.gov.uk/guidance/exceptional-financial-support-for-local-authorities-for-2026-27
@@ -57,7 +57,15 @@ An optional `ons_code` column pins names that are ambiguous or worded differentl
 
 These rows were transcribed from the gov.uk pages with an automated fetch on 26 November 2026. Spot-check them against the source before publishing any results.
 
-**Still to add:** the 2024-25 and earlier EFS rounds (the scheme has run since 2020).
+**Earlier rounds (2020-21 to 2024-25)** come from the gov.uk pages for each round, plus Norfolk's 2024-25 support agreed in February 2026. Withdrawn requests (Bexley, Peterborough, Luton and Nottingham in 2021-22, Bournemouth Christchurch and Poole, North Northamptonshire) aren't counted as events. Prior-year support is recorded against the year it covers, dated by the round that agreed it.
+
+Those pages were republished on 29 February 2024 without original decision dates, so `date_basis` records how each date was set:
+- **2020-21:** 1 April 2020, the earliest plausible date.
+- **2021-22:** 10 February 2021, the first EFS publication.
+- **2022-23 and 2023-24:** 1 February before the year starts.
+- **2024-25:** 29 February 2024, the announcement.
+
+Erring early can only make the backtest harder.
 
 ## Synthetic sample: `data/sample/`
 

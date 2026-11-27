@@ -7,6 +7,8 @@
 - Loader: keep only council codes, per-field scale factors, wider total-row pattern.
 - Event loading: optional `ons_code` column pins ambiguous names (Somerset, Medway); RO name suffixes (UA, BC, MBC, CC, DC, LB) ignored when matching.
 - Backtest reports base rate and lift against random picking.
+- Every EFS round from 2020-21 to 2024-25 added (61 rows plus Norfolk), with a `date_basis` column; earliest plausible dates used where gov.uk gives none.
+- Debt and commercial ratios fall back to net revenue expenditure when core spending power is missing.
 
 ## 0.2.0 (2026-11-26)
 

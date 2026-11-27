@@ -6,7 +6,7 @@
 
 An early-warning score for English councils at risk of a Section 114 notice or Exceptional Financial Support (EFS), built from public MHCLG and ONS data. It sits on a small shared core (`finance_ai_core`) that later finance AI projects will reuse.
 
-> **Headline result (real MHCLG data, 2022 and 2023):** flagging 20 councils a year, the transparent score found 9 of the 27 that went on to a Section 114 notice or Exceptional Financial Support, at about 6 times the random rate and a median of 812 days ahead. At 10 a year it found only 1, and the ML model was no better than chance. It's indicative, not proven: two evaluation years, and no borrowing data yet. Full results in [docs/REAL_RESULTS.md](docs/REAL_RESULTS.md).
+> **Headline result (real MHCLG data, 2022 and 2023):** flagging 20 councils a year, the transparent score caught 10 of the 28 that went on to a Section 114 notice or Exceptional Financial Support, at about 6 times the random rate and a median of 455 days (15 months) ahead. At 10 a year it was no better than random, because councils in low-risk tiers crowd the top, and the ML model never beat the simple score. It's indicative, not proven: two evaluation years, and no borrowing data yet. Full results in [docs/REAL_RESULTS.md](docs/REAL_RESULTS.md).
 
 ## Status (v0.1)
 
@@ -17,7 +17,7 @@ An early-warning score for English councils at risk of a Section 114 notice or E
 | ONS code succession (merges and splits), name matching for government lists | Section 25 statement extraction on 50 hand-labelled documents |
 | Signals ranked within tier, transparent baseline score | Borrowing and investment tables (debt and commercial signals) |
 | Walk-forward backtest: rules vs reserves-only vs HistGradientBoosting | Power BI report on the views in `sql/powerbi_views.sql` |
-| Real reference labels: 8 Section 114 notices, 104 EFS decisions (2025-26 and 2026-27 rounds) | Earlier EFS rounds (2024-25 and before) |
+| Real reference labels: 8 Section 114 notices and every EFS round from 2020-21 to 2026-27 | Tier-aware ranking, tested on 2024 |
 | Real-data backtest on the MHCLG outturn file ([results](docs/REAL_RESULTS.md)) | Core spending power from the finance settlements |
 | Tested on SQLite and PostgreSQL 16; 79 tests, 99% coverage | |
 
@@ -98,7 +98,7 @@ More detail in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 ## Known limits
 
 - The score is **relative**. Someone always tops each tier, so a percentile threshold will flag healthy councils in a healthy year. On the synthetic sample, a score of 75 or more flagged an undrifted council as early as the distressed ones. The backtest must report precision at k and false positives, not just hits.
-- Labels cover the 2025-26 and 2026-27 EFS rounds only. Earlier rounds still need adding: until they are, some councils that really did need support in earlier years count as negatives, which drags down every model's score.
+- EFS decision dates before the 2024-25 round are approximated with the earliest plausible date, because gov.uk republished those pages in 2024. Early dates make the backtest harder, never easier.
 - The revenue outturn multi-year set starts in 2017-18. With a two-year horizon and three training years, only a couple of years can be evaluated, so treat early real results as indicative.
 - Several Section 114 dates come from secondary sources and are marked `secondary` until checked against the council's own notice.
 - This is a research tool. It describes financial risk signals and does not assess any council's governance or conduct.
