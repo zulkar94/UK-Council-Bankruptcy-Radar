@@ -32,6 +32,8 @@ The rule weights were fixed before any real data was loaded. Results are reporte
 | 50 | reserves_only | 0.14 | 2.7x | 0.42 | 12 |
 | 50 | hgb | 0.07 | 1.4x | 0.21 | 10 |
 
+Median lead time for the rule score at k = 20 was 455 days.
+
 "Events caught" counts councils flagged in any evaluation year before their first event. Precision and recall count council-years.
 
 Adding the earlier EFS rounds (2020-21 to 2024-25) changed little. Precision at 20 rose from 0.23 to 0.30, and the earlier rounds moved several councils (Croydon, Slough, Nottingham, Lambeth) to an earlier first event.

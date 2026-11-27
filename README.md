@@ -6,7 +6,7 @@
 
 An early-warning score for English councils at risk of a Section 114 notice or Exceptional Financial Support (EFS), built from public MHCLG and ONS data. It sits on a small shared core (`finance_ai_core`) that later finance AI projects will reuse.
 
-> **Headline result (real MHCLG data, 2022 and 2023):** flagging 20 councils a year, the transparent score caught 10 of the 28 that went on to a Section 114 notice or Exceptional Financial Support, at about 6 times the random rate and a median of 455 days (15 months) ahead. At 10 a year it was no better than random, because councils in low-risk tiers crowd the top, and the ML model never beat the simple score. It's indicative, not proven: two evaluation years, and no borrowing data yet. Full results in [docs/REAL_RESULTS.md](docs/REAL_RESULTS.md).
+> **Headline result (real MHCLG data, 2022 and 2023):** flagging 20 councils a year, the transparent score caught 10 of the 28 that went on to a Section 114 notice or Exceptional Financial Support, at about 6 times the random rate and a median of 455 days (15 months) ahead. At 10 a year it was no better than random, because councils in low-risk tiers crowd the top, and the ML model never beat the simple score on precision. It's indicative, not proven: two evaluation years, and no borrowing data yet. Full results in [docs/REAL_RESULTS.md](docs/REAL_RESULTS.md).
 
 ## Status (v0.1)
 
