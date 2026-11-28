@@ -1,3 +1,3 @@
 """UK Council Bankruptcy Radar: ingestion, signals and early-warning score for English councils."""
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"

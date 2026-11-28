@@ -18,6 +18,7 @@ from council_radar.db import repo
 from council_radar.db.models import create_schema
 from council_radar.domain.rules import rule_score
 from council_radar.domain.signals import compute_signals
+from council_radar.export import build_tables, write_tables
 from council_radar.ingest.loader import extract_councils, inspect_headers, load_frame
 from council_radar.ingest.spec import SourceSpec, builtin_spec, load_spec
 from finance_ai_core.config import Settings
@@ -134,11 +135,7 @@ def cmd_score(args: argparse.Namespace) -> int:
 
 
 def cmd_backtest(args: argparse.Namespace) -> int:
-    cfg = BacktestConfig(
-        horizon=args.horizon,
-        k=args.k,
-        observed_until=date.fromisoformat(args.observed_until) if args.observed_until else None,
-    )
+    cfg = _backtest_config(args)
     with _session(args) as s:
         panel = repo.finance_panel(s)
         events = repo.events_frame(s)
@@ -155,6 +152,37 @@ def cmd_backtest(args: argparse.Namespace) -> int:
             Path(path).write_text(text, encoding="utf-8")
             print(f"written: {path}")
     return 0
+
+
+def _backtest_config(args: argparse.Namespace) -> BacktestConfig:
+    return BacktestConfig(
+        horizon=args.horizon,
+        k=args.k,
+        observed_until=date.fromisoformat(args.observed_until) if args.observed_until else None,
+    )
+
+
+def cmd_export_powerbi(args: argparse.Namespace) -> int:
+    with _session(args) as s:
+        panel = repo.finance_panel(s)
+        events = repo.events_frame(s)
+        councils = repo.councils_frame(s)
+    if panel.empty:
+        print("no finance data loaded", file=sys.stderr)
+        return 1
+    tables = build_tables(councils, panel, events, _backtest_config(args))
+    for path in write_tables(tables, Path(args.out)):
+        print(f"written: {path} ({len(tables[path.stem])} rows)")
+    return 0
+
+
+def _add_backtest_args(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument("--horizon", type=int, default=2, help="years ahead an event must fall")
+    sp.add_argument("--k", type=int, default=10, help="councils flagged per year")
+    sp.add_argument(
+        "--observed-until",
+        help="date (YYYY-MM-DD) up to which the event list is complete; default: last event",
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -197,15 +225,15 @@ def build_parser() -> argparse.ArgumentParser:
     sp.set_defaults(fn=cmd_score)
 
     sp = sub.add_parser("backtest", help="walk-forward backtest of all scorers")
-    sp.add_argument("--horizon", type=int, default=2, help="years ahead an event must fall")
-    sp.add_argument("--k", type=int, default=10, help="councils flagged per year")
-    sp.add_argument(
-        "--observed-until",
-        help="date (YYYY-MM-DD) up to which the event list is complete; default: last event",
-    )
+    _add_backtest_args(sp)
     sp.add_argument("--out", help="write markdown report")
     sp.add_argument("--json", help="write JSON report")
     sp.set_defaults(fn=cmd_backtest)
+
+    sp = sub.add_parser("export-powerbi", help="write star-schema CSVs for Power BI")
+    _add_backtest_args(sp)
+    sp.add_argument("--out", default="exports/powerbi")
+    sp.set_defaults(fn=cmd_export_powerbi)
     return p
 
 

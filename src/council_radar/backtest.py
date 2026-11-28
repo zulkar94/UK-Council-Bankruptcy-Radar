@@ -129,6 +129,7 @@ class ModelResult:
     per_year: list[dict[str, float | int]] = field(default_factory=list)
     caught: dict[str, int] = field(default_factory=dict)
     missed: list[str] = field(default_factory=list)
+    flagged: dict[int, list[str]] = field(default_factory=dict)  # year -> top-k codes
 
     @property
     def precision(self) -> float:
@@ -249,9 +250,13 @@ def run_backtest(
             r.at_risk += len(scores)
             r.true_positives += tp
             r.flags += k
+            r.flagged[y] = top
             r.per_year.append(
                 {
                     "year": y,
+                    "at_risk": len(scores),
+                    "flags": k,
+                    "true_positives": tp,
                     "positives": len(positives),
                     "precision_at_k": round(precision_at_k(scores, positives, k), 3),
                     "recall_at_k": round(recall_at_k(scores, positives, k), 3),

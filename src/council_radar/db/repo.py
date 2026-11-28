@@ -163,6 +163,11 @@ def load_events(session: Session, df: pd.DataFrame) -> MatchResult:
     return match
 
 
+def councils_frame(session: Session) -> pd.DataFrame:
+    rows = session.execute(select(Council.ons_code, Council.name, Council.tier, Council.region))
+    return pd.DataFrame(list(rows), columns=["ons_code", "name", "tier", "region"])
+
+
 def council_names(session: Session) -> dict[str, str]:
     return {code: name for code, name in session.execute(select(Council.ons_code, Council.name))}
 
