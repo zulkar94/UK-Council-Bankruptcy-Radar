@@ -1,0 +1,46 @@
+ons_code,name,tier,region,tier_label
+E06000901,Oakford Council,unitary,Synthetic Region,Unitary
+E06000902,Kestrelvale Council,unitary,Synthetic Region,Unitary
+E06000903,Uptonmere Council,unitary,Synthetic Region,Unitary
+E06000904,Brookvale Council,unitary,Synthetic Region,Unitary
+E06000905,Thornford Council,unitary,Synthetic Region,Unitary
+E06000906,Northford Council,unitary,Synthetic Region,Unitary
+E06000907,Pennvale Council,unitary,Synthetic Region,Unitary
+E06000908,Dunmere Council,unitary,Synthetic Region,Unitary
+E06000909,Stonemere Council,unitary,Synthetic Region,Unitary
+E06000910,Junipermere Council,unitary,Synthetic Region,Unitary
+E06000911,Brookford Council,unitary,Synthetic Region,Unitary
+E06000912,Dunford Council,unitary,Synthetic Region,Unitary
+E07000901,Yarrowford Council,district,Synthetic Region,Shire district
+E07000902,Thornvale Council,district,Synthetic Region,Shire district
+E07000903,Pennford Council,district,Synthetic Region,Shire district
+E07000904,Westerford Council,district,Synthetic Region,Shire district
+E07000905,Yarrowmere Council,district,Synthetic Region,Shire district
+E07000906,Dunhollow Council,district,Synthetic Region,Shire district
+E07000907,Brookhollow Council,district,Synthetic Region,Shire district
+E07000908,Elmford Council,district,Synthetic Region,Shire district
+E07000909,Fernford Council,district,Synthetic Region,Shire district
+E07000910,Stonehollow Council,district,Synthetic Region,Shire district
+E07000911,Ivyhollow Council,district,Synthetic Region,Shire district
+E07000912,Fernhollow Council,district,Synthetic Region,Shire district
+E07000913,Kestrelmere Council,district,Synthetic Region,Shire district
+E07000914,Ivyvale Council,district,Synthetic Region,Shire district
+E08000901,Oakmere Council,metropolitan,Synthetic Region,Metropolitan district
+E08000902,Elmhollow Council,metropolitan,Synthetic Region,Metropolitan district
+E08000903,Hartmere Council,metropolitan,Synthetic Region,Metropolitan district
+E08000904,Westermere Council,metropolitan,Synthetic Region,Metropolitan district
+E08000905,Harthollow Council,metropolitan,Synthetic Region,Metropolitan district
+E08000906,Thornmere Council,metropolitan,Synthetic Region,Metropolitan district
+E08000907,Ravenmere Council,metropolitan,Synthetic Region,Metropolitan district
+E08000908,Westerhollow Council,metropolitan,Synthetic Region,Metropolitan district
+E09000901,Millford Council,london_borough,Synthetic Region,London borough
+E09000902,Kestrelhollow Council,london_borough,Synthetic Region,London borough
+E09000903,Millvale Council,london_borough,Synthetic Region,London borough
+E09000904,Northmere Council,london_borough,Synthetic Region,London borough
+E09000905,Ashmere Council,london_borough,Synthetic Region,London borough
+E09000906,Quarrymere Council,london_borough,Synthetic Region,London borough
+E09000907,Stonevale Council,london_borough,Synthetic Region,London borough
+E09000908,Uptonford Council,london_borough,Synthetic Region,London borough
+E10000901,Synthetic Shire County,county,Synthetic Region,County
+E06000951,North Synthetic Shire,unitary,Synthetic Region,Unitary
+E06000952,West Synthetic Shire,unitary,Synthetic Region,Unitary

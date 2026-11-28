@@ -1,0 +1,4 @@
+model,k,horizon_years,eval_years,precision,recall,base_rate,lift,events_caught,events_missed,median_lead_days
+rules_v1,5,2,"2020,2021,2022",0.5333,0.5714,0.125,4.267,6,3,400.0
+reserves_only,5,2,"2020,2021,2022",0.4667,0.5,0.125,3.733,5,4,354.0
+hgb,5,2,"2020,2021,2022",0.4,0.4286,0.125,3.2,6,3,350.5

@@ -12,14 +12,15 @@ An early-warning score for English councils at risk of a Section 114 notice or E
 
 | Done | Next |
 |---|---|
-| Shared core: evaluation harness, AI extraction with citation checks, portable upsert | Map real MHCLG revenue outturn headers (template provided) |
-| Council Radar ingestion: CSV, XLSX and ODS; column maps in TOML; validation reports | Load ONS council list, borrowing and core spending power tables |
-| ONS code succession (merges and splits), name matching for government lists | Section 25 statement extraction on 50 hand-labelled documents |
-| Signals ranked within tier, transparent baseline score | Borrowing and investment tables (debt and commercial signals) |
-| Walk-forward backtest: rules vs reserves-only vs HistGradientBoosting | Power BI report on the views in `sql/powerbi_views.sql` |
-| Real reference labels: 8 Section 114 notices and every EFS round from 2020-21 to 2026-27 | Tier-aware ranking, tested on 2024 |
-| Real-data backtest on the MHCLG outturn file ([results](docs/REAL_RESULTS.md)) | Core spending power from the finance settlements |
-| Tested on SQLite and PostgreSQL 16; 79 tests, 99% coverage | |
+| Shared core: evaluation harness, AI extraction with citation checks, portable upsert | Borrowing and investment tables (debt and commercial signals) |
+| Ingestion of the real MHCLG outturn file: CSV, XLSX and ODS, column maps in TOML, validation reports | Tier-aware ranking, tested on 2024 once its window closes |
+| ONS code succession (merges and splits), name matching for government lists | Core spending power from the finance settlements |
+| Signals ranked within tier, transparent baseline score | Section 25 statement extraction on 50 hand-labelled documents |
+| Walk-forward backtest: rules vs reserves-only vs HistGradientBoosting | Build the Power BI report from the guide (needs Power BI Desktop) |
+| Real-data backtest ([results](docs/REAL_RESULTS.md)) | |
+| Power BI star-schema export, DAX measures and report guide ([powerbi/](powerbi/README.md)) | |
+| Reference labels: 8 Section 114 notices and every EFS round from 2020-21 to 2026-27 | |
+| Tested on SQLite and PostgreSQL 16; 86 tests, 99% coverage | |
 
 ## Quickstart (synthetic sample, about 1 minute)
 
@@ -85,6 +86,10 @@ Everything in `data/sample/` is invented: names, codes (a `9xx` range that can't
 
 Sources and caveats for each file are in [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
 
+## Power BI
+
+`council-radar export-powerbi --out exports/powerbi` writes eight star-schema CSVs: councils, years, signals, scores with ranks, events and three backtest tables. [powerbi/README.md](powerbi/README.md) covers loading them, the relationships, the DAX measures in [powerbi/measures.dax](powerbi/measures.dax), and a page layout. It also gives reference numbers to check the measures against. A synthetic export sits in `powerbi/sample_data/`, so the report can be built straight away. The DAX hasn't been run in Power BI as part of this repo's tests, but the CSVs it reads are tested.
+
 ## Design decisions
 
 - **Compare within tier.** Districts don't run social care and counties don't collect most council tax. Every percentile is computed within (tier, year).
@@ -110,7 +115,8 @@ src/finance_ai_core/   config, db (base, engine, upsert), eval (metrics, splits)
 src/council_radar/     domain (codes, names, signals, rules, s25), backtest, ingest, db (models, repo), cli
 data/reference/        real distress events with source URLs
 data/sample/           synthetic panel for tests and demos
-sql/                   Power BI views
+sql/                   SQL views for Power BI DirectQuery on PostgreSQL
+powerbi/               DAX measures, report guide, synthetic sample export
 tests/                 pytest suite
 ```
 

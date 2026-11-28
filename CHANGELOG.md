@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 (2026-11-28)
+
+- `council-radar export-powerbi`: eight star-schema CSVs (dims, signals, scores with ranks, events, backtest summary, per-year and per-council outcomes). The outcome table reconciles exactly with the backtest summary.
+- `powerbi/`: DAX measures, model and report guide, and a synthetic sample export.
+- Backtest results record which councils each model flagged each year.
+
 ## 0.3.0 (2026-11-27)
 
 - Real-data backtest on the MHCLG revenue outturn file: results in `docs/REAL_RESULTS.md`.

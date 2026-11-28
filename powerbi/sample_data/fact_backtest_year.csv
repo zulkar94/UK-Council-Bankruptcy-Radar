@@ -1,0 +1,10 @@
+model,year,at_risk,flags,true_positives,positives,precision_at_k,recall_at_k
+rules_v1,2020,40,5,2,6,0.4,0.333
+rules_v1,2021,37,5,3,5,0.6,0.6
+rules_v1,2022,35,5,3,3,0.6,1.0
+reserves_only,2020,40,5,2,6,0.4,0.333
+reserves_only,2021,37,5,3,5,0.6,0.6
+reserves_only,2022,35,5,2,3,0.4,0.667
+hgb,2020,40,5,3,6,0.6,0.5
+hgb,2021,37,5,2,5,0.4,0.4
+hgb,2022,35,5,1,3,0.2,0.333

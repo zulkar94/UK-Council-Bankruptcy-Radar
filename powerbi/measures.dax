@@ -1,0 +1,134 @@
+// DAX for the Council Radar Power BI model.
+// Table and column names match the CSVs written by `council-radar export-powerbi`.
+// Paste each block into Power BI Desktop: Modeling > New measure (or New table for
+// the calculated tables). Written to standard patterns but not run in Power BI here;
+// check each measure against the CSV totals noted in powerbi/README.md.
+
+// ---------- Calculated tables ----------
+
+// One row per model, so slicers filter scores and backtest tables together.
+dim_model =
+DISTINCT (
+    SELECTCOLUMNS ( fact_backtest_summary, "model", fact_backtest_summary[model] )
+)
+
+// What-if parameter for "how many councils do we flag each year".
+'Top N' =
+GENERATESERIES ( 5, 50, 5 )
+
+// ---------- Measures: portfolio ----------
+
+Councils =
+DISTINCTCOUNT ( dim_council[ons_code] )
+
+Avg Risk Score =
+AVERAGE ( fact_score[score] )
+
+Avg Risk Score Prior Year =
+VAR y = MAX ( dim_year[year] )
+RETURN
+    CALCULATE ( [Avg Risk Score], dim_year[year] = y - 1 )
+
+Risk Score Change =
+[Avg Risk Score] - [Avg Risk Score Prior Year]
+
+Score Rank =
+MIN ( fact_score[rank_overall] )
+
+Selected Top N =
+SELECTEDVALUE ( 'Top N'[Value], 20 )
+
+In Top N =
+IF ( [Score Rank] <= [Selected Top N], 1, 0 )
+
+Councils In Top N =
+SUMX ( VALUES ( dim_council[ons_code] ), [In Top N] )
+
+// ---------- Measures: finances (inputs are GBP) ----------
+
+Net Revenue Expenditure £m =
+DIVIDE ( SUM ( fact_signals[net_revenue_expenditure] ), 1e6 )
+
+Usable Reserves £m =
+DIVIDE (
+    SUM ( fact_signals[reserves_unallocated] ) + SUM ( fact_signals[reserves_earmarked] ),
+    1e6
+)
+
+Usable Reserves % of NRE =
+DIVIDE (
+    SUM ( fact_signals[reserves_unallocated] ) + SUM ( fact_signals[reserves_earmarked] ),
+    SUM ( fact_signals[net_revenue_expenditure] )
+)
+
+DSG Deficit £m =
+DIVIDE ( SUM ( fact_signals[dsg_deficit] ), 1e6 )
+
+Interest % of NRE =
+DIVIDE ( SUM ( fact_signals[interest_cost] ), SUM ( fact_signals[net_revenue_expenditure] ) )
+
+Social Care Share =
+DIVIDE ( SUM ( fact_signals[social_care_spend] ), SUM ( fact_signals[net_revenue_expenditure] ) )
+
+Signal Coverage =
+AVERAGE ( fact_score[coverage] )
+
+// ---------- Measures: distress events ----------
+
+EFS Support £m =
+DIVIDE (
+    CALCULATE ( SUM ( fact_event[amount_gbp] ), fact_event[event_type] = "efs" ),
+    1e6
+)
+
+Councils With EFS =
+CALCULATE ( DISTINCTCOUNT ( fact_event[ons_code] ), fact_event[event_type] = "efs" )
+
+Councils With s114 =
+CALCULATE ( DISTINCTCOUNT ( fact_event[ons_code] ), fact_event[event_type] = "s114" )
+
+// ---------- Measures: backtest (from fact_backtest_outcome) ----------
+// One row per model, evaluation year and at-risk council. These reproduce
+// fact_backtest_summary exactly when no other filter is applied.
+
+Council-Years Evaluated =
+COUNTROWS ( fact_backtest_outcome )
+
+Flagged =
+CALCULATE ( COUNTROWS ( fact_backtest_outcome ), fact_backtest_outcome[flagged] = 1 )
+
+Events Within Horizon =
+CALCULATE ( COUNTROWS ( fact_backtest_outcome ), fact_backtest_outcome[had_event] = 1 )
+
+True Positives =
+CALCULATE (
+    COUNTROWS ( fact_backtest_outcome ),
+    fact_backtest_outcome[flagged] = 1,
+    fact_backtest_outcome[had_event] = 1
+)
+
+False Positives =
+CALCULATE (
+    COUNTROWS ( fact_backtest_outcome ),
+    fact_backtest_outcome[flagged] = 1,
+    fact_backtest_outcome[had_event] = 0
+)
+
+Missed Events =
+CALCULATE (
+    COUNTROWS ( fact_backtest_outcome ),
+    fact_backtest_outcome[flagged] = 0,
+    fact_backtest_outcome[had_event] = 1
+)
+
+Precision =
+DIVIDE ( [True Positives], [Flagged] )
+
+Recall =
+DIVIDE ( [True Positives], [Events Within Horizon] )
+
+Base Rate =
+DIVIDE ( [Events Within Horizon], [Council-Years Evaluated] )
+
+Lift vs Random =
+DIVIDE ( [Precision], [Base Rate] )

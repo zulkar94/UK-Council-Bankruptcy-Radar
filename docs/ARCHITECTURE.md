@@ -34,6 +34,7 @@
 - `ingest`: TOML specs and the file loader.
 - `db`: ORM models and the repository.
 - `backtest`: leakage-safe labels, walk-forward folds, three scorers judged on the same years, precision and recall at k, lead time, watchlist. Feature columns that are all blank or constant in a fold are dropped before fitting.
+- `export`: star-schema CSVs for Power BI. Unique keys and reconciliation with the backtest are tested.
 - `cli`: `council-radar` commands.
 
 ## Schema notes
